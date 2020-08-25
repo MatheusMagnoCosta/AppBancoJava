@@ -1,5 +1,7 @@
 package src;
 import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+import src.front.Visual;
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
@@ -13,25 +15,25 @@ public class Main {
 	private static DecimalFormat df =  new DecimalFormat("###,##0.00"); 
 	public static void main(final String[] args) {
 		
-    int option = -1;
+		int option = -1;
+		Visual.imprimirLogo();
+		pausa(3);
     while(option != 0) {
-      System.out.println("==== Escolha uma ação ====");
-      System.out.println("[1] Abrir Uma Conta");
-      System.out.println("[2] Todos os Clientes");
-      System.out.println("[3] Sacar Dinheiro");
-      System.out.println("[4] Depositar Dinheiro");
-      System.out.println("[5] Extrato Da Conta");
-      System.out.println("=========================");
-      System.out.println("[0] SAIR DO SISTEMA");
+			clrsrc();
+			Visual.menu();
       option = input.nextInt();
 			input.nextLine();
 
 			switch(option) {
 				case 1:
-					cadastroDeCliente();
+					clrsrc();
+					dadosCadastroDeCliente();
 					break;
 				case 2:
-          listarClientes();
+					clrsrc();
+					Cliente.listarClientes();
+					System.out.println("Pressione enter para continuar...");
+					input.nextLine();
 					break;
 				case 3:
           System.out.println("sacando...");
@@ -51,7 +53,7 @@ public class Main {
 			}
 		}	
 	}
-			public static void cadastroDeCliente(){
+			public static void dadosCadastroDeCliente(){
 				String codigo = "", nome = "",email="", telefone="";
 				System.out.println("++++++Cadastro De Novo Cliente++++++");
 				System.out.println("Qual o código?");
@@ -62,36 +64,23 @@ public class Main {
 				email = input.nextLine();
 				System.out.println("Qual o telefone?");
 				telefone = input.nextLine();
-
-				Cliente novoCliente = new Cliente();
-				novoCliente.setCodigo(codigo);
-				novoCliente.setNome(nome);
-				novoCliente.setEmail(email);
-				novoCliente.setTelefone(telefone);
-				
-				if (!listaCliente.contains(novoCliente)){
-					listaCliente.add(novoCliente);
-					System.out.println("Cliente Cadastrado Com Sucesso!");
-					}else{
-						System.out.println("Já exixte um cliente com esse código.");
-					}
-				}
-
-			public static void listarClientes(){
-				System.out.println("========= = Todos Os Clientes Cadastrados = =========");
-				System.out.println(String.format("%6s %-30s %-30s %-20s", "código", "Nome", "E-mail", "Telefone"));
-				for (Cliente cliente:listaCliente){
-					System.out.println(String.format("%6s %-30s %-30s %-20s",
-					cliente.getCodigo(),
-					cliente.getNome(),
-					cliente.getEmail(),
-					cliente.getTelefone()));
-				}
-				System.out.println("Pressione enter para continuar...");
-				input.nextLine();
+				Cliente.cadastroDeCliente(codigo, nome, email, telefone);
 			}
+			public static void clrsrc(){
+				try{
+					new ProcessBuilder("clear").inheritIO().start().waitFor();
+				}catch (Exception ex){
+					System.out.println(ex);
+				}
+			}
+			public static void pausa (int tempo){
+				try {
+					TimeUnit.SECONDS.sleep(tempo);
 
-			
+				}catch(InterruptedException e){
+					e.printStackTrace();
+				}
 
-		
+			} 
+
 	}

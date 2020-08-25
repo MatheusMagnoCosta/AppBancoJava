@@ -1,10 +1,14 @@
 package src;
+import java.util.ArrayList;
+import java.util.List;
+import src.front.Alertas;
 
 public class Cliente {
   private String codigo;
   private String nome;
   private String email;
   private String telefone;
+  private static List<Cliente> listaCliente = new ArrayList<>();
 
   public String getCodigo(){
     return codigo;
@@ -62,5 +66,32 @@ public class Cliente {
     return true;
   }
 
+  public static void cadastroDeCliente(String codigo,String nome,String email,String telefone){
+    Cliente novoCliente = new Cliente();
+    novoCliente.setCodigo(codigo);
+    novoCliente.setNome(nome);
+    novoCliente.setEmail(email);
+    novoCliente.setTelefone(telefone);
+    
+    if (!listaCliente.contains(novoCliente)){
+      listaCliente.add(novoCliente);
+        Alertas.cadastradoSucesso();
+      }else{
+        Alertas.jaCadastrado();
+      }
+      Main.pausa(3);
+    }
+
+    public static void listarClientes(){
+      System.out.println("========= = Todos Os Clientes Cadastrados = =========");
+      System.out.println(String.format("%6s %-30s %-30s %-20s", "código", "Nome", "E-mail", "Telefone"));
+      for (Cliente cliente:listaCliente){
+        System.out.println(String.format("%6s %-30s %-30s %-20s",
+        cliente.getCodigo(),
+        cliente.getNome(),
+        cliente.getEmail(),
+        cliente.getTelefone()));
+      }
+    }
 
 }
